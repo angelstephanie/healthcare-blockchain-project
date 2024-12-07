@@ -21,6 +21,14 @@ contract Healthcare {
         string providerName;
     }
 
+    struct MedicalLicense {
+        uint256 licenseId;
+        uint256 profId;
+        string licenseType;
+        string issueDate;
+        string expiryDate;
+    }
+
     struct MedicalProvider {
         address addr;
         string providerName;
@@ -28,6 +36,7 @@ contract Healthcare {
 
     MedicalProfessional[] private professionals;
     MedicalPractice[] private practices;
+    MedicalLicense[] private licenses;
     MedicalProvider[] private providers;
 
     address private owner;
@@ -47,17 +56,22 @@ contract Healthcare {
     }
 
     function addMedicalProfessional(uint256 profId, string memory name, string memory position, uint256 experience) public {
-        require(isProvider(msg.sender), "Only medical providers can add a medical professional");
+        require(isProvider(msg.sender), "Only medical providers can add medical professional");
         professionals.push(MedicalProfessional(profId, name, position, experience));
     }
 
     function addMedicalPractice(uint256 practiceId, string memory patientName, string memory diagnosis, string memory treatment, string memory date, uint256 profId, string memory providerName) public {
-        require(isProvider(msg.sender), "Only medical providers can add a medical practice");
+        require(isProvider(msg.sender), "Only medical providers can add medical practice");
         practices.push(MedicalPractice(practiceId, patientName, diagnosis, treatment, date, profId, providerName));
     }
 
+    function addMedicalLicense(uint256 licenseId, uint256 profId, string memory licenseType, string memory issueDate, string memory expiryDate) public {
+        require(isProvider(msg.sender), "Only medical providers can add medical license");
+        licenses.push(MedicalLicense(licenseId, profId, licenseType, issueDate, expiryDate));
+    }
+
     function addMedicalProvider(address addr, string memory providerName) public {
-        require(isProvider(msg.sender), "Only medical providers can add a new provider");
+        require(isProvider(msg.sender), "Only medical providers can add new provider");
         providers.push(MedicalProvider(addr, providerName));
     }
 
@@ -67,6 +81,10 @@ contract Healthcare {
 
     function getAllMedicalPractices() public view returns (MedicalPractice[] memory) {
         return practices;
+    }
+
+    function getAllMedicalLicenses() public view returns (MedicalLicense[] memory) {
+        return licenses;
     }
 
     function getAllMedicalProviders() public view returns (MedicalProvider[] memory) {
