@@ -46,6 +46,33 @@ contract Healthcare {
         providers.push(MedicalProvider(owner, providerName));
     }
 
+    function isProfIdExist(uint256 profId) private view returns (bool) {
+        for (uint256 i = 0; i < professionals.length; i++) {
+            if (professionals[i].profId == profId) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function isLicenseIdExist(uint256 licenseId) private view returns (bool) {
+        for (uint256 i = 0; i < licenses.length; i++) {
+            if (licenses[i].licenseId == licenseId) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function isPracticeIdExist(uint256 practiceId) private view returns (bool) {
+        for (uint256 i = 0; i < practices.length; i++) {
+            if (practices[i].practiceId == practiceId) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     function isProvider(address addr) private view returns (bool) {
         for (uint256 i = 0; i < providers.length; i++) {
             if (providers[i].addr == addr) {
@@ -57,21 +84,27 @@ contract Healthcare {
 
     function addMedicalProfessional(uint256 profId, string memory name, string memory position, uint256 experience) public {
         require(isProvider(msg.sender), "Only medical providers can add medical professional");
+        require(!isProfIdExist(profId), "Medical professional ID already exists");
         professionals.push(MedicalProfessional(profId, name, position, experience));
     }
 
     function addMedicalPractice(uint256 practiceId, string memory patientName, string memory diagnosis, string memory treatment, string memory date, uint256 profId, string memory providerName) public {
         require(isProvider(msg.sender), "Only medical providers can add medical practice");
+        require(!isPracticeIdExist(practiceId), "Medical practice ID already exists");
+        require(isProfIdExist(profId), "Medical professional ID does not exist");
         practices.push(MedicalPractice(practiceId, patientName, diagnosis, treatment, date, profId, providerName));
     }
 
     function addMedicalLicense(uint256 licenseId, uint256 profId, string memory licenseType, string memory issueDate, string memory expiryDate) public {
         require(isProvider(msg.sender), "Only medical providers can add medical license");
+        require(!isLicenseIdExist(licenseId), "Medical license ID already exists");
+        require(isProfIdExist(profId), "Medical professional ID does not exist");
         licenses.push(MedicalLicense(licenseId, profId, licenseType, issueDate, expiryDate));
     }
 
     function addMedicalProvider(address addr, string memory providerName) public {
         require(isProvider(msg.sender), "Only medical providers can add new provider");
+        require(!isProvider(addr), "Medical provider already exists");
         providers.push(MedicalProvider(addr, providerName));
     }
 
