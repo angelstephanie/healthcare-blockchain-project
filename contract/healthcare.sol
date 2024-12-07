@@ -29,14 +29,14 @@ contract Healthcare {
     MedicalPractice[] private practices;
     MedicalProvider[] private providers;
 
-    address public owner;
+    address private owner;
 
     constructor(string memory providerName) {
         owner = msg.sender;
         providers.push(MedicalProvider(owner, providerName));
     }
 
-    function isProvider(address addr) public view returns (bool) {
+    function isProvider(address addr) private view returns (bool) {
         for (uint256 i = 0; i < providers.length; i++) {
             if (providers[i].addr == addr) {
                 return true;
@@ -46,12 +46,12 @@ contract Healthcare {
     }
 
     function addMedicalProfessional(uint256 profId, string memory name, string memory position, uint256 experience) public {
-        require(isProvider(msg.sender), "Only medical providers can add a new provider");
+        require(isProvider(msg.sender), "Only medical providers can add a medical professional");
         professionals.push(MedicalProfessional(profId, name, position, experience));
     }
 
     function addMedicalPractice(uint256 practiceId, string memory patientName, string memory diagnosis, string memory treatment, string memory date, uint256 profId, string memory providerName) public {
-        require(isProvider(msg.sender), "Only medical providers can add a new provider");
+        require(isProvider(msg.sender), "Only medical providers can add a medical practice");
         practices.push(MedicalPractice(practiceId, patientName, diagnosis, treatment, date, profId, providerName));
     }
 
