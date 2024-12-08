@@ -47,7 +47,7 @@ contract Healthcare {
         providers.push(MedicalProvider(owner, providerName));
     }
 
-    function isProfessionalAddressExist(address addr) private view returns (bool) {
+    function isProfessionalAddressExist(address addr) public view returns (bool) {
         for (uint256 i = 0; i < professionals.length; i++) {
             if (professionals[i].addr == addr) {
                 return true;
@@ -83,7 +83,7 @@ contract Healthcare {
         return false;
     }
 
-    function isProvider(address addr) private view returns (bool) {
+    function isProvider(address addr) public view returns (bool) {
         for (uint256 i = 0; i < providers.length; i++) {
             if (providers[i].addr == addr) {
                 return true;
