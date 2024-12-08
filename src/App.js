@@ -2,25 +2,26 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import AppNavbar from './components/Navbar';
 import Home from './components/Home';
-import Profile from './components/Profile';
 import WalletSignIn from './components/WalletSignIn';
+import MedicalProviderDashboard from './components/MedicalProviderDashboard';
 
 const App = () => {
-    const [walletAddress, setWalletAddress] = useState(null);
+    const [walletAddress, setWalletAddress] = useState(null)
+    const [userType, setUserType] = useState("")
 
     return (
         <Router>
-            <AppNavbar walletAddress={walletAddress} />
+            <AppNavbar walletAddress={walletAddress} userType={userType} />
             <div className="container mt-4">
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route 
                         path="/signin" 
-                        element={<WalletSignIn setWalletAddress={setWalletAddress} />} 
+                        element={<WalletSignIn setWalletAddress={setWalletAddress} setUserType={setUserType} />} 
                     />
                     <Route 
-                        path="/profile" 
-                        element={<Profile walletAddress={walletAddress} />} 
+                        path="/provider-dashboard" 
+                        element={<MedicalProviderDashboard walletAddress={walletAddress} />} 
                     />
                 </Routes>
             </div>

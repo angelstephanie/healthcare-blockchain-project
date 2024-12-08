@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { Container, Button, Alert } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react'
+import { Container, Button, Alert } from 'react-bootstrap'
+import { useNavigate } from 'react-router-dom'
 
-const WalletSignIn = ({ setWalletAddress }) => {
-    const [error, setError] = useState('');
-    const navigate = useNavigate();
+const WalletSignIn = ({ setWalletAddress, setUserType }) => {
+    const [error, setError] = useState('')
+    const navigate = useNavigate()
 
     const connectWallet = async () => {
         try {
@@ -15,21 +15,27 @@ const WalletSignIn = ({ setWalletAddress }) => {
             // const accounts = await web3.eth.requestAccounts();
             // const address = accounts[0];
 
-            const address = '0xPLACEHOLDER'; // Placeholder for connected wallet address
-            setWalletAddress(address);
-            navigate('/profile');
+            const walletAddress = '0xPLACEHOLDER' // Placeholder for connected wallet address
+            setWalletAddress(walletAddress)
+            console.log("Wallet connected:", walletAddress);
         } catch (err) {
-            console.error(err);
-            setError('Failed to connect wallet. Ensure MetaMask or another provider is installed.');
+            console.error(err)
+            setError('Failed to connect wallet. Ensure MetaMask or another provider is installed.')
         }
     };
 
+    const loginAsProvider = async () => {
+        await connectWallet()
+        setUserType("Provider")
+        navigate("/provider-dashboard");
+    }
+
     return (
         <Container>
-            <h1>Sign In with Wallet</h1>
+            <h1>Login with Wallet</h1>
             {error && <Alert variant="danger">{error}</Alert>}
-            <Button variant="primary" onClick={connectWallet}>
-                Connect Wallet
+            <Button variant="primary" onClick={loginAsProvider} className="me-3">
+                Login as Medical Provider
             </Button>
         </Container>
     );
