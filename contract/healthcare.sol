@@ -108,6 +108,68 @@ contract Healthcare {
         providers.push(MedicalProvider(addr, providerName));
     }
 
+    function getMedicalProfessional(uint256 profId) public view returns (MedicalProfessional memory) {
+        for (uint256 i = 0; i < professionals.length; i++) {
+            if (professionals[i].profId == profId) {
+                return professionals[i];
+            }
+        }
+        revert("Medical professional not found");
+    }
+
+    function getMedicalPracticesByProfId(uint256 profId) public view returns (MedicalPractice[] memory) {
+        uint256 count = 0;
+        for (uint256 i = 0; i < practices.length; i++) {
+            if (practices[i].profId == profId) {
+                count++;
+            }
+        }
+        if(count == 0) {
+            revert("No medical practices found for the given professional ID");
+        }
+
+        MedicalPractice[] memory result = new MedicalPractice[](count);
+        uint256 index = 0;
+        for (uint256 i = 0; i < practices.length; i++) {
+            if (practices[i].profId == profId) {
+                result[index] = practices[i];
+                index++;
+            }
+        }
+        return result;
+    }
+
+    function getMedicalLicensesByProfId(uint256 profId) public view returns (MedicalLicense[] memory) {
+        uint256 count = 0;
+        for (uint256 i = 0; i < licenses.length; i++) {
+            if (licenses[i].profId == profId) {
+                count++;
+            }
+        }
+        if(count == 0) {
+            revert("No medical licenses found for the given professional ID");
+        }
+
+        MedicalLicense[] memory result = new MedicalLicense[](count);
+        uint256 index = 0;
+        for (uint256 i = 0; i < licenses.length; i++) {
+            if (licenses[i].profId == profId) {
+                result[index] = licenses[i];
+                index++;
+            }
+        }
+        return result;
+    }
+
+    function getMedicalProvider(address addr) public view returns (MedicalProvider memory) {
+        for (uint256 i = 0; i < providers.length; i++) {
+            if (providers[i].addr == addr) {
+                return providers[i];
+            }
+        }
+        revert("Medical provider not found");
+    }
+
     function getAllMedicalProfessionals() public view returns (MedicalProfessional[] memory) {
         return professionals;
     }
