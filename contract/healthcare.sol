@@ -9,6 +9,7 @@ contract Healthcare {
         string name;
         string position;
         uint256 experience;
+        address addr;
     }
 
     struct MedicalPractice {
@@ -82,10 +83,10 @@ contract Healthcare {
         return false;
     }
 
-    function addMedicalProfessional(uint256 profId, string memory name, string memory position, uint256 experience) public {
-        require(isProvider(msg.sender), "Only medical providers can add medical professional");
+    function addMedicalProfessional(uint256 profId, string memory name, string memory position, uint256 experience, address addr) public {
+        //require(isProvider(msg.sender), "Only medical providers can add medical professional");
         require(!isProfIdExist(profId), "Medical professional ID already exists");
-        professionals.push(MedicalProfessional(profId, name, position, experience));
+        professionals.push(MedicalProfessional(profId, name, position, experience, addr));
     }
 
     function addMedicalPractice(uint256 practiceId, string memory patientName, string memory diagnosis, string memory treatment, string memory date, uint256 profId, string memory providerName) public {
