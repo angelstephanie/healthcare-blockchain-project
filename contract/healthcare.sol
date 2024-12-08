@@ -118,7 +118,7 @@ contract Healthcare {
         providers.push(MedicalProvider(addr, providerName));
     }
 
-    function getMedicalProfessional(uint256 profId) public view returns (MedicalProfessional memory) {
+    function getMedicalProfessionalByProfId(uint256 profId) public view returns (MedicalProfessional memory) {
         for (uint256 i = 0; i < professionals.length; i++) {
             if (professionals[i].profId == profId) {
                 return professionals[i];
