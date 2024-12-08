@@ -47,6 +47,15 @@ contract Healthcare {
         providers.push(MedicalProvider(owner, providerName));
     }
 
+    function isProfessionalAddressExist(address addr) private view returns (bool) {
+        for (uint256 i = 0; i < professionals.length; i++) {
+            if (professionals[i].addr == addr) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     function isProfIdExist(uint256 profId) private view returns (bool) {
         for (uint256 i = 0; i < professionals.length; i++) {
             if (professionals[i].profId == profId) {
@@ -84,7 +93,7 @@ contract Healthcare {
     }
 
     function addMedicalProfessional(uint256 profId, string memory name, string memory position, uint256 experience, address addr) public {
-        //require(isProvider(msg.sender), "Only medical providers can add medical professional");
+        require(!isProfessionalAddressExist(addr), "Medical professional address already exists");
         require(!isProfIdExist(profId), "Medical professional ID already exists");
         professionals.push(MedicalProfessional(profId, name, position, experience, addr));
     }
