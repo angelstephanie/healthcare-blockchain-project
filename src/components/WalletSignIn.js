@@ -17,7 +17,7 @@ const WalletSignIn = ({ setWalletAddress, setUserType }) => {
 
             const walletAddress = '0xPLACEHOLDER' // Placeholder for connected wallet address
             setWalletAddress(walletAddress)
-            console.log("Wallet connected:", walletAddress);
+            console.log("Wallet connected:", walletAddress)
         } catch (err) {
             console.error(err)
             setError('Failed to connect wallet. Ensure MetaMask or another provider is installed.')
@@ -27,7 +27,13 @@ const WalletSignIn = ({ setWalletAddress, setUserType }) => {
     const loginAsProvider = async () => {
         await connectWallet()
         setUserType("Provider")
-        navigate("/provider-dashboard");
+        navigate("/provider-dashboard")
+    }
+
+    const loginAsProfessional = async () => {
+        await connectWallet()
+        setUserType("Professional")
+        navigate("/professional-dashboard");
     }
 
     return (
@@ -36,6 +42,9 @@ const WalletSignIn = ({ setWalletAddress, setUserType }) => {
             {error && <Alert variant="danger">{error}</Alert>}
             <Button variant="primary" onClick={loginAsProvider} className="me-3">
                 Login as Medical Provider
+            </Button>
+            <Button variant="secondary" onClick={loginAsProfessional}>
+                Login as Medical Professional
             </Button>
         </Container>
     );

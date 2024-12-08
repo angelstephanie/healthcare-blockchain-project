@@ -4,6 +4,7 @@ import AppNavbar from './components/Navbar';
 import Home from './components/Home';
 import WalletSignIn from './components/WalletSignIn';
 import MedicalProviderDashboard from './components/MedicalProviderDashboard';
+import MedicalProfessionalDashboard from './components/MedicalProfessionalDashboard';
 
 const App = () => {
     const [walletAddress, setWalletAddress] = useState(null)
@@ -22,6 +23,10 @@ const App = () => {
                     <Route 
                         path="/provider-dashboard" 
                         element={<MedicalProviderDashboard walletAddress={walletAddress} />} 
+                    />
+                    <Route 
+                        path="/professional-dashboard" 
+                        element={<MedicalProfessionalDashboard walletAddress={walletAddress} />} 
                     />
                 </Routes>
             </div>
