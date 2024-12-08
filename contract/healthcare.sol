@@ -118,6 +118,15 @@ contract Healthcare {
         providers.push(MedicalProvider(addr, providerName));
     }
 
+    function getMedicalProfessionalByProfAddress(address addr) public view returns (MedicalProfessional memory) {
+        for (uint256 i = 0; i < professionals.length; i++) {
+            if (professionals[i].addr == addr) {
+                return professionals[i];
+            }
+        }
+        revert("Medical professional not found");
+    }
+
     function getMedicalProfessionalByProfId(uint256 profId) public view returns (MedicalProfessional memory) {
         for (uint256 i = 0; i < professionals.length; i++) {
             if (professionals[i].profId == profId) {
