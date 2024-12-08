@@ -1,16 +1,21 @@
 import React, { useState } from "react";
-import { Container, Alert } from "react-bootstrap";
+import { Container, Alert, Button } from "react-bootstrap";
 import FormComponent from "./FormComponent";
+import web3 from '../web3';
+import myContract from '../myContract';
 
 const MedicalProviderDashboard = ({ walletAddress }) => {
-    const [successMessage, setSuccessMessage] = useState("");
-    const [errorMessage, setErrorMessage] = useState("");
+    const [medicalProvider, setMedicalProvider] = useState({
+        addr: "",
+        providerName: "",
+    });
 
     const [medicalProfessional, setMedicalProfessional] = useState({
         profId: "",
         name: "",
         position: "",
         experience: "",
+        addr: ""
     });
 
     const [medicalLicense, setMedicalLicense] = useState({
@@ -31,11 +36,17 @@ const MedicalProviderDashboard = ({ walletAddress }) => {
         providerName: "",
     });
 
+    const medicalProviderFields = [
+        { label: "Wallet Address", name: "addr", type: "text" },
+        { label: "Provider Name", name: "providerName", type: "text" },
+    ];
+
     const medicalProfessionalFields = [
         { label: "Professional ID", name: "profId", type: "text" },
         { label: "Name", name: "name", type: "text" },
         { label: "Position", name: "position", type: "text" },
         { label: "Experience (Years)", name: "experience", type: "number" },
+        { label: "Wallet Address", name: "addr", type: "text" },
     ];
 
     const medicalLicenseFields = [
@@ -56,28 +67,36 @@ const MedicalProviderDashboard = ({ walletAddress }) => {
         { label: "Provider Name", name: "providerName", type: "text" },
     ];
 
-    const addMedicalProfessional = (e) => {
+    const addMedicalProvider = async (e) => {
+        e.preventDefault();
+        console.log("Adding Medical Provider:", medicalProvider);
+        await myContract.methods.addMedicalProvider(medicalProvider.addr, medicalProvider.providerName).send({
+          from: walletAddress
+        });
+    };
+
+    const addMedicalProfessional = async (e) => {
         e.preventDefault();
         console.log("Adding Medical Professional:", medicalProfessional);
-        setSuccessMessage("Medical Professional added successfully!");
-        setErrorMessage("");
-        // Web3.js logic goes here
+        await myContract.methods.addMedicalProfessional(medicalProfessional.profId, medicalProfessional.name, medicalProfessional.position, medicalProfessional.experience, medicalProfessional.addr).send({
+          from: walletAddress
+        });
     };
 
-    const addMedicalLicense = (e) => {
+    const addMedicalLicense = async (e) => {
         e.preventDefault();
         console.log("Adding Medical License:", medicalLicense);
-        setSuccessMessage("Medical License added successfully!");
-        setErrorMessage("");
-        // Web3.js logic goes here
+        await myContract.methods.addMedicalLicense(medicalLicense.licenseId, medicalLicense.profId, medicalLicense.licenseType, medicalLicense.issueDate, medicalLicense.expiryDate).send({
+          from: walletAddress
+        });
     };
 
-    const addMedicalPractice = (e) => {
+    const addMedicalPractice = async (e) => {
         e.preventDefault();
         console.log("Adding Medical Practice:", medicalPractice);
-        setSuccessMessage("Medical Practice added successfully!");
-        setErrorMessage("");
-        // Web3.js logic goes here
+        await myContract.methods.addMedicalPractice(medicalPractice.practiceId, medicalPractice.patientName, medicalPractice.diagnosis, medicalPractice.treatment, medicalPractice.date, medicalPractice.profId, medicalPractice.providerName).send({
+          from: walletAddress
+        });
     };
 
     return (
@@ -85,9 +104,14 @@ const MedicalProviderDashboard = ({ walletAddress }) => {
             <h2>Medical Provider Dashboard</h2>
             <p>Welcome! Your wallet address: {walletAddress}</p>
 
-            {successMessage && <Alert variant="success">{successMessage}</Alert>}
-            {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
-
+            <FormComponent
+                title="Add Medical Provider"
+                fields={medicalProviderFields}
+                onSubmit={addMedicalProvider}
+                state={medicalProvider}
+                setState={setMedicalProvider}
+            />
+            <br/>
             <FormComponent
                 title="Add Medical Professional"
                 fields={medicalProfessionalFields}
@@ -95,7 +119,7 @@ const MedicalProviderDashboard = ({ walletAddress }) => {
                 state={medicalProfessional}
                 setState={setMedicalProfessional}
             />
-
+            <br/>
             <FormComponent
                 title="Add Medical License"
                 fields={medicalLicenseFields}
@@ -103,7 +127,7 @@ const MedicalProviderDashboard = ({ walletAddress }) => {
                 state={medicalLicense}
                 setState={setMedicalLicense}
             />
-
+            <br/>
             <FormComponent
                 title="Add Medical Practice"
                 fields={medicalPracticeFields}
@@ -113,6 +137,7 @@ const MedicalProviderDashboard = ({ walletAddress }) => {
             />
         </Container>
     );
-};
+}
+
 
 export default MedicalProviderDashboard;
